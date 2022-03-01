@@ -39,5 +39,5 @@ pylint:
 pytest:
   stage: pytest
   script:
-    - pytest
+    - pytest *.py
 
