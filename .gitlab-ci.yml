@@ -39,7 +39,7 @@ pytest:
 pylint:
   stage: checks
   script:
-    - pylint *.py
+    - flake8 *.py
 
 
 
