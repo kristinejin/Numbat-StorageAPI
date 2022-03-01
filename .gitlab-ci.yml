@@ -28,10 +28,16 @@ before_script:
   - pip install -r requirements.txt #installs all the requirements
 
 stages:
-  - checks
+  - pylint
+  - pytest
 
 pylint:
-  stage: checks
+  stage: pylint
   script:
     - pylint *.py
+
+pytest:
+  stage: pytest
+  script:
+    - pytest
 
