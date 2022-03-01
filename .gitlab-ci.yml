@@ -31,13 +31,15 @@ stages:
   - pylint
   - pytest
 
+pytest:
+  stage: pytest
+  script:
+    - pytest *.py
+    
 pylint:
   stage: pylint
   script:
     - pylint *.py
 
-pytest:
-  stage: pytest
-  script:
-    - pytest
+
 
