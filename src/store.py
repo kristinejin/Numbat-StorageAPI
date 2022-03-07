@@ -1,6 +1,5 @@
 import xml.etree.ElementTree as ET
 import psycopg2
-import sys
 
 def storeInvoice(xml: str, filename: str):
     assert isinstance(xml, str), 'Please provide the xml as a string'
@@ -35,7 +34,7 @@ def storeInvoice(xml: str, filename: str):
     #Close DB connection
         cur.close()
         conn.close()
-    except Exception as e:
+    except Exception:
         print("Unable to connect to the database")
 
 if __name__ == '__main__':
