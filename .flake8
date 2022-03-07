@@ -1,4 +1,4 @@
 [flake8]
 exclude =
-    storeTest.py
+    test_store.py
     xmlString.py
