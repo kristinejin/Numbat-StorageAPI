@@ -1,0 +1,5 @@
+[flake8]
+exclude =
+    test_store.py
+    echo_test.py
+    xmlString.py
