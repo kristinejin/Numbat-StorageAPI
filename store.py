@@ -18,18 +18,19 @@ def storeInvoice(xml: str, filename: str):
 
     #Connect to DB
     try:
-        conn = psycopg2.connect("dbname=TeamFudge")
+        conn = psycopg2.connect(dbname='drj7scqvv00fb',user='hugfbhqshfeuxo',password='bb21e74bd662eb54bbfb67841e33cb3994fee2526208ee3667c736777acd8658',host='ec2-44-195-191-252.compute-1.amazonaws.com',port='5432')
 
     #Open a cursor for db operations
         cur = conn.cursor()
+        print("hi")
     
     #Insert File Name and XML into 
-        sql = "INSERT INTO invoices VALUES (%s,XMLPARSE (DOCUMENT %s))"
-        val = (filename, xml)
-        cur.execute(sql,val)
+    #     sql = "INSERT INTO invoices VALUES (%s,XMLPARSE (DOCUMENT %s))"
+    #     val = (filename, xml)
+    #     cur.execute(sql,val)
 
-    #Save changes
-        conn.commit()
+    # #Save changes
+    #     conn.commit()
 
     #Close DB connection
         cur.close()
