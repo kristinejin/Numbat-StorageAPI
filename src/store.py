@@ -1,12 +1,12 @@
 import xml.etree.ElementTree as ET
 import psycopg2
-import os
+
 
 def storeInvoice(xml: str, filename: str):
     assert isinstance(xml, str), 'Please provide the xml as a string'
 
 #Convert string to XML
-    root = ET.fromstring(xml)
+    # root = ET.fromstring(xml)
     
 
 #Extract key from XML
