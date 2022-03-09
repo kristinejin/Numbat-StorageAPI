@@ -31,14 +31,36 @@
 
 
 # '''
-# import pytest
-# from xmlString import xml_as_string, not_xml_as_string
+import pytest
+import string
+import random
+import psycopg2
+from src.store import storeInvoice
+# from xmlString import xml_as_string
+
+DATABASE_URL = "postgres://hugfbhqshfeuxo:bb21e74bd662eb54bbfb67841e33cb3994fee2526208ee3667c736777acd8658@ec2-44-195-191-252.compute-1.amazonaws.com:5432/drj7scqvv00fb"
+
+def test_store():
+    fileName = (''.join(random.choice(string.ascii_lowercase) for i in range(10)) )
+    storeInvoice(fileName,xml_as_string)
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    #Open a cursor for db operations
+    cur = conn.cursor()
+    
+    #Insert File Name and XML into 
+    sql = "SELECT * FROM invoices where FileName = %s"
+    val = (fileName)
+    cur.execute(sql,val)
+    retFileName, retXml = cur.fetchone()
+    assert retFileName == fileName
+    assert retXml == xml_as_string
 
 # #Standard store and retrieve. No errors
 # def test_StoreRetrive_normal():
 #     fileName = "file1"
-#     ret = storeInvoice("xml_as_string", fileName)
-#     assert ret == "file saved"
+#     storeInvoice(fileName,xmlString)
+#     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    
 #     #once invoice stored successfully
 #     ret = retriveInvoice(fileName)
 #     assert ret == xml_as_string
@@ -63,3 +85,4 @@
 #     - Auth function and permission when retriving the file
 #     - file name rules test 
 # """
+
