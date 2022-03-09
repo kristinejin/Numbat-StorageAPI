@@ -22,7 +22,7 @@ def extract(filename: str):
       cur = conn.cursor()
     
     #Insert File Name and XML into 
-      sql = "SELECT * FROM invoices"
+      sql = "SELECT filename FROM invoices WHERE FileName = %s"
       val = (filename)
       cur.execute(sql,val)
       retFileName, retXml = cur.fetchone()
