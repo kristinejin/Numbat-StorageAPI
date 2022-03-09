@@ -36,24 +36,27 @@ import string
 import random
 import psycopg2
 from src.store import storeInvoice
-# from xmlString import xml_as_string
+from test.xmlString import xml_as_string
+#import xml.etree.ElementTree as ET
 
 DATABASE_URL = "postgres://hugfbhqshfeuxo:bb21e74bd662eb54bbfb67841e33cb3994fee2526208ee3667c736777acd8658@ec2-44-195-191-252.compute-1.amazonaws.com:5432/drj7scqvv00fb"
 
 def test_store():
-    fileName = (''.join(random.choice(string.ascii_lowercase) for i in range(10)) )
-    storeInvoice(fileName,xml_as_string)
+    fileName = (''.join(random.choice(string.ascii_lowercase) for i in range(4)) )
+    storeInvoice(xml_as_string,fileName)
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     #Open a cursor for db operations
     cur = conn.cursor()
     
     #Insert File Name and XML into 
-    sql = "SELECT * FROM invoices where FileName = %s"
+    sql = "SELECT filename FROM invoices WHERE FileName = %s"
     val = (fileName)
-    cur.execute(sql,val)
-    retFileName, retXml = cur.fetchone()
+    cur.execute(sql,[val])
+    retFileName = cur.fetchone()
+    print(type(retFileName))
+    retFileName = retFileName[0]
     assert retFileName == fileName
-    assert retXml == xml_as_string
+    cur.close()
 
 # #Standard store and retrieve. No errors
 # def test_StoreRetrive_normal():

@@ -3,10 +3,13 @@ import psycopg2
 
 
 def storeInvoice(xml: str, filename: str):
+
     assert isinstance(xml, str), 'Please provide the xml as a string'
 
 #Convert string to XML
     # root = ET.fromstring(xml)
+    # print(root)
+
     
 
 #Extract key from XML
@@ -141,4 +144,4 @@ if __name__ == '__main__':
          <cbc:BaseQuantity unitCode="C62" unitCodeListID="UNECERec20">1.0</cbc:BaseQuantity>
       </cac:Price>
    </cac:InvoiceLine>
-</Invoice>""", "test2")
+</Invoice>""", "test3")
