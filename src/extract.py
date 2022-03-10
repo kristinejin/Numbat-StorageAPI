@@ -1,3 +1,6 @@
+import psycopg2
+
+
 def extract(filename: str):
     assert isinstance(filename, str), 'Please provide the xml as a string'
 
@@ -24,16 +27,18 @@ def extract(filename: str):
     #Extract File Name and XML 
       sql = "SELECT * FROM invoices WHERE FileName = %s"
       val = (filename)
-      cur.execute(sql,val)
-      retFileName, retXml = cur.fetchone()
-      print(retFileName)
+      cur.execute(sql,[val])
+      returnvalues = cur.fetchone()
       
-
+      return returnvalues
     #Save changes
       #conn.commit()
 
     #Close DB connection
       cur.close()
       conn.close()
+      
     except Exception as e:
       print(e)
+
+    
