@@ -21,12 +21,13 @@ def extract(filename: str):
     #Open a cursor for db operations
       cur = conn.cursor()
     
-    #Insert File Name and XML into 
-      sql = "SELECT filename FROM invoices WHERE FileName = %s"
+    #Extract File Name and XML 
+      sql = "SELECT * FROM invoices WHERE FileName = %s"
       val = (filename)
       cur.execute(sql,val)
       retFileName, retXml = cur.fetchone()
-
+      print(retFileName)
+      
 
     #Save changes
       #conn.commit()
@@ -34,3 +35,5 @@ def extract(filename: str):
     #Close DB connection
       cur.close()
       conn.close()
+    except Exception as e:
+      print(e)
