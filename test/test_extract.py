@@ -13,7 +13,7 @@ DATABASE_URL = "postgres://hugfbhqshfeuxo:bb21e74bd662eb54bbfb67841e33cb3994fee2
 def test_store_and_extract():
     fileName = (''.join(random.choice(string.ascii_lowercase) for i in range(4)) )
     storeInvoice(xml_as_string,fileName)
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    #conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     #Open a cursor for db operations
     #cur = conn.cursor()
     
@@ -23,14 +23,14 @@ def test_store_and_extract():
     assert returnedvalues[0] == fileName
     #assert returnedvalues[1] == xml_as_string
 
-# extract non-existant file
-def test_extract_file_not_found():
-    fileName = (''.join(random.choice(string.ascii_lowercase) for i in range(4)) )
-    storeInvoice(xml_as_string,fileName)
-    #conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+# # extract non-existant file
+# def test_extract_file_not_found():
+#     fileName = (''.join(random.choice(string.ascii_lowercase) for i in range(4)) )
+#     storeInvoice(xml_as_string,fileName)
+#     #conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
-    with pytest.raises(Exception):
-        extract(filename + 'Not in existance')
+#     with pytest.raises(Exception):
+#         extract(fileName + 'Not in existance')
 
 """
 need additional testing for authorisation
