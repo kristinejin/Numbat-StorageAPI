@@ -15,7 +15,7 @@ def test_store_and_extract():
     storeInvoice(xml_as_string,fileName)
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     #Open a cursor for db operations
-    cur = conn.cursor()
+    #cur = conn.cursor()
     
     
     #Insert File Name and XML into 
@@ -25,11 +25,14 @@ def test_store_and_extract():
 
 # extract non-existant file
 def test_extract_file_not_found():
+    fileName = (''.join(random.choice(string.ascii_lowercase) for i in range(4)) )
+    storeInvoice(xml_as_string,fileName)
+    #conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+
     with pytest.raises(Exception):
-        extract(fileName + 'Not Correct')
+        extract(filename + 'Not in existance')
 
 """
 need additional testing for authorisation
     - attempting to extract an invoice that user does not have access to
 """
-
