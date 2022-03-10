@@ -1,7 +1,5 @@
-import pytest
 import string
 import random
-import psycopg2
 from src.store import storeInvoice
 from src.extract import extract
 from test.xmlString import xml_as_string
