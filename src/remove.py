@@ -2,9 +2,9 @@
 import psycopg2
 
 
-def removeInvoice(xml: str, filename: str):
+def removeInvoice(filename: str):
 
-    assert isinstance(xml, str), 'Please provide the xml as a string'
+    assert isinstance(filename, str), 'Please provide the file name as a string'
 
 # Convert string to XML
     # root = ET.fromstring(xml)
@@ -23,7 +23,7 @@ def removeInvoice(xml: str, filename: str):
     # Remove invoice via filename
       sql = "DELETE FROM invoices WHERE filename = %s"
       val = filename
-      cur.execute(sql,val)
+      cur.execute(sql,[val])
 
     # Save changes
       conn.commit()
@@ -31,6 +31,8 @@ def removeInvoice(xml: str, filename: str):
     # Close DB connection
       cur.close()
       conn.close()
+
+      return "Invoice deleted"
     except Exception as e:
       print(e)
 
