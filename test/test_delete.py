@@ -7,37 +7,42 @@ Assumptions:
     - 
 """
 import pytest
-
+import string
+import random
+import psycopg2
 from src.store import storeInvoice
 from src.remove import removeInvoice
-from src.extract import extract
-from test.xmlString import xml_as_string, not_xml_as_string
+from test.xmlString import xml_as_string
+#import xml.etree.ElementTree as ET
 
-# Test deleting an exising xml with no errors
-def test_delete_normal():
+DATABASE_URL = "postgres://hugfbhqshfeuxo:bb21e74bd662eb54bbfb67841e33cb3994fee2526208ee3667c736777acd8658@ec2-44-195-191-252.compute-1.amazonaws.com:5432/drj7scqvv00fb"
 
-    # Populate the db with an invoice
-    fileName = "file1"
-    storeInvoice(xml_as_string, fileName)
-    # assert output == "file saved"
+def test_delete():
+    fileName = (''.join(random.choice(string.ascii_lowercase) for i in range(4)) )
+    storeInvoice(xml_as_string,fileName)
 
-    # Attempt to delete the saved invoice
-    output = removeInvoice('EBWASP1002')  # ---> check with surya is this is the ID and same for the test below
-    assert output == "Invoice deleted"
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    #Open a cursor for db operations
+    cur = conn.cursor()
+    
+    #Insert File Name and XML into 
+    sql = " SELECT fileName FROM invoices WHERE fileName = %s"
+    val = (fileName)
+    cur.execute(sql,[val])
+    retFileName = cur.fetchone()
+    retFileName = retFileName[0]
+    assert retFileName == fileName
 
-    # Check invoice is no longer in db
-    output = extract(fileName)
-    assert output[0] != fileName
+    #confirmed file saved
+    #now delete
+    removeInvoice(fileName)
+    sql = " SELECT fileName FROM invoices WHERE fileName = %s"
+    val = (fileName)
+    cur.execute(sql,[val])
+    # retFileName = cur.fetchone()
+    # retFileName = retFileName[0]
+    # assert retFileName == None
+    assert cur.fetchone() == None
 
-# Test deleting a non existant file
-# def test_delete_nonexistant():
-
-#     # Populate db with a invoices
-#     fileName = "file1"
-#     wrongFilename = "file2"
-#     storeInvoice("xml_as_string", fileName)
-#     # assert output == "file saved"
-
-#     # attempt to delete 'wrongFilename'
-#     with pytest.raises(Exception):
-#         removeInvoice('EBWASP1002' + 'SENG2021')
+    cur.close()
+    
