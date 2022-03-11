@@ -8,9 +8,9 @@ Assumptions:
 """
 import pytest
 
-from src.storeInvoice import storeInvoice
-from src.delete_invoice import delete_invoice
-from src.retrieveInvoice import retrieveInvoice
+from src.store import storeInvoice
+from src.remove import removeInvoice
+from src.extract import extract
 from sample_xml import xml_as_string, not_xml_as_string
 
 # Test deleting an exising xml with no errors
