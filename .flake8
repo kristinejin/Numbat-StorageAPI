@@ -1,0 +1,14 @@
+[flake8]
+exclude =
+    test_store.py
+    echo_test.py
+    xmlString.py
+    .git
+
+ignore = 
+    E3
+    E2
+    E5
+    W2
+    E11
+
