@@ -1,11 +1,29 @@
 from flask import Flask, Response, request, render_template
+from store import storeInvoice
 
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods=["POST","GET"])
 def flask_store():
-    return render_template("store_html.html")
+    #Get User Input
+    if request.method == "POST":
+        fname = request.form["fnm"]
+        xmlfile = request.form["xmll"]
+        print(fname, xmlfile)
+
+    #Check if store function stores it properly
+        try:
+            storeInvoice(xmlfile,fname)
+            return render_template("savedS.html")
+
+        except Exception as e:
+            return render_template("savedF.html")
+            raise e
+
+    else:
+
+        return render_template("storeMain.html")
     
     
 
