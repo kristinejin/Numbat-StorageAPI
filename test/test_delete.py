@@ -22,12 +22,12 @@ def test_delete_normal():
     assert output == "file saved"
 
     # Attempt to delete the saved invoice
-    output = delete_invoice('EBWASP1002')  # ---> check with surya is this is the ID and same for the test below
+    output = removeInvoice('EBWASP1002')  # ---> check with surya is this is the ID and same for the test below
     assert output == "Invoice deleted"
 
     # Check invoice is no longer in db
     with pytest.raises(Exception):
-        retriveInvoice(filename)
+        extract(fileName)
 
 # Test deleting a non existant file
 def test_delete_nonexistant():
@@ -40,6 +40,4 @@ def test_delete_nonexistant():
 
     # attempt to delete 'wrongFilename'
     with pytest.raises(Exception):
-        delete_invoice('EBWASP1002' + 'SENG2021')
-
-
+        removeInvoice('EBWASP1002' + 'SENG2021')
