@@ -10,7 +10,6 @@ def flask_store():
     if request.method == "POST":
         fname = request.form["fnm"]
         xmlfile = request.form["xmll"]
-        print(fname, xmlfile)
 
     #Check if store function stores it properly
         try:
