@@ -9,7 +9,7 @@ Assumptions:
 import pytest
 
 from src.store import storeInvoice
-from src.remove import removeInvoice
+from src.remove_invoice import removeInvoice
 from src.extract import extract
 from sample_xml import xml_as_string, not_xml_as_string
 
