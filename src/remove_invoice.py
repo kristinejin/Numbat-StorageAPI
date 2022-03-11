@@ -6,37 +6,29 @@ def removeInvoice(xml: str, filename: str):
 
     assert isinstance(xml, str), 'Please provide the xml as a string'
 
-#Convert string to XML
+# Convert string to XML
     # root = ET.fromstring(xml)
     # print(root)
 
-    
+# Store key and XML in DB
 
-#Extract key from XML
-#     list1 = []
-#     for child in root.iter():
-#         if child.text.strip():
-#             list1.append(child.text)
-
-# #Store key and XML in DB
-
-#     #Connect to DB
+# Connect to DB
     try:
       DATABASE_URL = "postgres://hugfbhqshfeuxo:bb21e74bd662eb54bbfb67841e33cb3994fee2526208ee3667c736777acd8658@ec2-44-195-191-252.compute-1.amazonaws.com:5432/drj7scqvv00fb"
       conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
-    #Open a cursor for db operations
+    # Open a cursor for db operations
       cur = conn.cursor()
     
-    #Insert File Name and XML into 
+    # Remove invoice via filename
       sql = "DELETE FROM invoices WHERE filename = %s"
       val = filename
       cur.execute(sql,val)
 
-    #Save changes
+    # Save changes
       conn.commit()
 
-    #Close DB connection
+    # Close DB connection
       cur.close()
       conn.close()
     except Exception as e:
