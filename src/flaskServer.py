@@ -59,7 +59,6 @@ def flask_extract():
     #Check if store function stores it properly
         try:
             fname,xmlf = extract(fname)
-            print(fname, xmlf)
             return render_template("extractS.html", xmll = xmlf)
         except Exception as e:
             return render_template("extractF.html")
