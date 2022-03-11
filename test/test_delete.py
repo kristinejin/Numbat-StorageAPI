@@ -1,39 +1,48 @@
+"""
+Delete Function:
+
+    - Given a user's desired e-invoice, this function will remove said invoice from the data base if it exists
+
+Assumptions:
+    - 
+"""
 import pytest
 import string
 import random
 import psycopg2
 from src.store import storeInvoice
+from src.remove import removeInvoice
 from test.xmlString import xml_as_string
 #import xml.etree.ElementTree as ET
 
 DATABASE_URL = "postgres://hugfbhqshfeuxo:bb21e74bd662eb54bbfb67841e33cb3994fee2526208ee3667c736777acd8658@ec2-44-195-191-252.compute-1.amazonaws.com:5432/drj7scqvv00fb"
 
-# def test_delete():
-#     fileName = (''.join(random.choice(string.ascii_lowercase) for i in range(4)) )
-#     storeInvoice(xml_as_string,fileName)
+def test_delete():
+    fileName = (''.join(random.choice(string.ascii_lowercase) for i in range(4)) )
+    storeInvoice(xml_as_string,fileName)
 
-#     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-#     #Open a cursor for db operations
-#     cur = conn.cursor()
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    #Open a cursor for db operations
+    cur = conn.cursor()
     
-#     #Insert File Name and XML into 
-#     sql = " SELECT fileName FROM invoices WHERE fileName = %s"
-#     val = (fileName)
-#     cur.execute(sql,[val])
-#     retFileName = cur.fetchone()
-#     retFileName = retFileName[0]
-#     assert retFileName == fileName
+    #Insert File Name and XML into 
+    sql = " SELECT fileName FROM invoices WHERE fileName = %s"
+    val = (fileName)
+    cur.execute(sql,[val])
+    retFileName = cur.fetchone()
+    retFileName = retFileName[0]
+    assert retFileName == fileName
 
-#     #confirmed file saved
-#     #now delete
-#     storeDelete(fileName)
-#     sql = " SELECT fileName FROM invoices WHERE fileName = %s"
-#     val = (fileName)
-#     cur.execute(sql,[val])
-#     retFileName = cur.fetchone()
-#     retFileName = retFileName[0]
-#     assert retFileName == None
+    #confirmed file saved
+    #now delete
+    removeInvoice(fileName)
+    sql = " SELECT fileName FROM invoices WHERE fileName = %s"
+    val = (fileName)
+    cur.execute(sql,[val])
+    # retFileName = cur.fetchone()
+    # retFileName = retFileName[0]
+    # assert retFileName == None
+    assert cur.fetchone() == None
 
-
-#     cur.close()
+    cur.close()
     
