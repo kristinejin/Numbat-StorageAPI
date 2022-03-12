@@ -35,14 +35,14 @@ def flask_store():
     else:
         return render_template("storeMain.html")
 
-# @app.route("/delete", methods=["POST","GET"])
-# def flask_delete():
+# @app.route("/remove", methods=["POST","GET"])
+# def flask_remove():
 #     #Get User Input
 #     if request.method == "POST":
 #         fname = request.form["dfm"]
 #     #Check if store function stores it properly
 #         try:
-#             deleteInvoice(fname)
+#             removeInvoice(fname)
 #             return render_template("savedS.html")
 #         except Exception as e:
 #             return render_template("savedF.html")
