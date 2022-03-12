@@ -1,4 +1,4 @@
-from flask import Flask, Response, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for
 from store import storeInvoice
 from extract import extract
 from remove import removeInvoice
