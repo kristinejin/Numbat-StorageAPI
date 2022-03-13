@@ -3,9 +3,9 @@ import random
 
 
 def generate_random_date():
-    year = random.randint(1960, 2022)
+    year = random.randint(1960, 2021)
     month = random.randint(1, 12)
-    day = random.randint(1, 31)
+    day = random.randint(1, 28)
     if month < 10:
         month = f'0{month}'
     if day < 10:
