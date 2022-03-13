@@ -36,4 +36,3 @@ def test_extract_not_there(client):
     resp = client.post("/extract", data={"efn": "No-name"})
     assert resp.status_code == 200
     # assert resp.status_code == 400
-
