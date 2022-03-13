@@ -4,7 +4,8 @@ exclude =
     echo_test.py
     xmlString.py
     test_remove.py
-    test_search.py
+    test_search_v1.py
+    test_search_v2.py
     test_extract.py
     
     .git

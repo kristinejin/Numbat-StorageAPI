@@ -9,7 +9,7 @@ from src.search import search
 app = Flask(__name__)
 
 
-@app.route("/", methods=["POST","GET"])
+@app.route("/", methods=["POST", "GET"])
 def flask_home():
     if request.method == "POST":
         if request.form["HomeButton"] == 'Store Invoice':
@@ -23,15 +23,16 @@ def flask_home():
     else:
         return render_template("Home.html")
 
-@app.route("/store", methods=["POST","GET"])
+
+@app.route("/store", methods=["POST", "GET"])
 def flask_store():
-    #Get User Input
+    # Get User Input
     if request.method == "POST":
         fname = request.form["fnm"]
         xmlfile = request.form["xmll"]
-    #Check if store function stores it properly
+    # Check if store function stores it properly
         try:
-            storeInvoice(xmlfile,fname)
+            storeInvoice(xmlfile, fname)
             return render_template("savedS.html")
         except Exception as e:
             return render_template("savedF.html")
@@ -40,13 +41,14 @@ def flask_store():
     else:
         return render_template("storeMain.html")
 
-@app.route("/remove", methods=["POST","GET"])
+
+@app.route("/remove", methods=["POST", "GET"])
 def flask_remove():
-    #Get User Input
+    # Get User Input
     if request.method == "POST":
         fname = request.form["dfm"]
         print(fname)
-    #Check if store function stores it properly
+    # Check if store function stores it properly
         try:
             removeInvoice(fname)
             return render_template("DeleteS.html")
@@ -58,15 +60,16 @@ def flask_remove():
     else:
         return render_template("deleteMain.html")
 
-@app.route("/extract", methods=["POST","GET"])
+
+@app.route("/extract", methods=["POST", "GET"])
 def flask_extract():
-    #Get User Input
+    # Get User Input
     if request.method == "POST":
         fname = request.form["efn"]
-    #Check if store function stores it properly
+    # Check if store function stores it properly
         try:
-            fname,xmlf = extract(fname)
-            return render_template("extractS.html", xmll = xmlf)
+            fname, xmlf = extract(fname)
+            return render_template("extractS.html", xmll=xmlf)
         except Exception as e:
             return render_template("extractF.html")
             raise e
@@ -74,20 +77,21 @@ def flask_extract():
     else:
         return render_template("extractMain.html")
 
-@app.route("/search", methods=["POST","GET"])
+
+@app.route("/search", methods=["POST", "GET"])
 def flask_search():
-    #Get User Input
+    # Get User Input
     sender_name = []
     issue_date = []
     if request.method == "POST":
-        sender_name.append(request.form["sfn"]) 
+        sender_name.append(request.form["sfn"])
         issue_date.append(request.form["ssd"])
-    #Check if store function stores it properly
+    # Check if store function stores it properly
         try:
-            ret_l = search(issue_date,sender_name)
+            ret_l = search(issue_date, sender_name)
             # print(ret_l)
 
-            return render_template("searchS.html", xmll = ret_l)
+            return render_template("searchS.html", xmll=ret_l)
         except Exception as e:
             # print (e)
             return render_template("extractF.html")
@@ -95,7 +99,8 @@ def flask_search():
 
     else:
         return render_template("searchMain.html")
-    
+
+
 if __name__ == '__main__':
     app.debug = True
     app.run()
