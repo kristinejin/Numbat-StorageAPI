@@ -1,12 +1,21 @@
 import xml.etree.ElementTree as ET
 import psycopg2
 from src.extract import extract
+from src.config import DATABASE_URL
 
-DATABASE_URL = "postgres://hugfbhqshfeuxo:bb21e74bd662eb54bbfb67841e33cb3994fee2526208ee3667c736777acd8658@ec2-44-195-191-252.compute-1.amazonaws.com:5432/drj7scqvv00fb"
 
+def store(xml: str, file_name: str):
+    """given a standardised e-invoice xml in a string and a file name, save this e-invoice to database with the file name.
 
-def storeInvoice(xml: str, file_name: str):
+    Args:
+        xml (str): the e-invoice that the user wants to be saved
+        file_name (str): the file name that the user wants the e-invoice to be saved with
 
+    Raises:
+        Exception: when the invoice xml is not a string
+        Exception: when file name already exists in the db
+        Exception: when connection to db failed
+    """
     if not isinstance(xml, str):
         raise Exception("Please provide the invoice xml in a string")
 
@@ -26,7 +35,6 @@ def storeInvoice(xml: str, file_name: str):
     sender_name = key_list[10]
 
     try:
-        DATABASE_URL = "postgres://hugfbhqshfeuxo:bb21e74bd662eb54bbfb67841e33cb3994fee2526208ee3667c736777acd8658@ec2-44-195-191-252.compute-1.amazonaws.com:5432/drj7scqvv00fb"
         # Connect to DB
         conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 

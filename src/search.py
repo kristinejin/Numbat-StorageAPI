@@ -1,4 +1,5 @@
 import psycopg2
+from src.config import DATABASE_URL
 
 
 def search(issue_date: list, sender_name: list):
@@ -37,7 +38,6 @@ def search(issue_date: list, sender_name: list):
     ret_list = []
 
     try:
-        DATABASE_URL = "postgres://hugfbhqshfeuxo:bb21e74bd662eb54bbfb67841e33cb3994fee2526208ee3667c736777acd8658@ec2-44-195-191-252.compute-1.amazonaws.com:5432/drj7scqvv00fb"
         # connect to db
         conn = psycopg2.connect(DATABASE_URL, sslmode='require')
         cur = conn.cursor()

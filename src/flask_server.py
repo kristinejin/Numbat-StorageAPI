@@ -1,12 +1,14 @@
 from flask import Flask, request, render_template, redirect, url_for
-from src.store import storeInvoice
+from src.store import store
 from src.extract import extract
-from src.remove import removeInvoice
+from src.remove import remove
 from src.search import search
 # from src.error import InputError, ConnectionError
 
 
 app = Flask(__name__)
+
+# home route
 
 
 @app.route("/", methods=["POST", "GET"])
@@ -23,6 +25,8 @@ def flask_home():
     else:
         return render_template("Home.html")
 
+# store route
+
 
 @app.route("/store", methods=["POST", "GET"])
 def flask_store():
@@ -32,7 +36,7 @@ def flask_store():
         xmlfile = request.form["xmll"]
     # Check if store function stores it properly
         try:
-            storeInvoice(xmlfile, fname)
+            store(xmlfile, fname)
             return render_template("savedS.html")
         except Exception as e:
             return render_template("savedF.html")
@@ -40,6 +44,8 @@ def flask_store():
 
     else:
         return render_template("storeMain.html")
+
+# remove route
 
 
 @app.route("/remove", methods=["POST", "GET"])
@@ -50,15 +56,17 @@ def flask_remove():
         print(fname)
     # Check if store function stores it properly
         try:
-            removeInvoice(fname)
+            remove(fname)
             return render_template("DeleteS.html")
         except Exception as e:
             print(e)
             return render_template("DeleteF.html")
-            raise e
+            # raise e
 
     else:
         return render_template("deleteMain.html")
+
+# extract route
 
 
 @app.route("/extract", methods=["POST", "GET"])

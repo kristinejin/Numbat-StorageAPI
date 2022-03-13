@@ -1,15 +1,25 @@
 import psycopg2
 from src.extract import extract
+from src.config import DATABASE_URL
 
 
-def removeInvoice(file_name: str):
+def remove(file_name: str):
+    """given a file name of an invoice, remove the invoice associate with the file name
 
+    Args:
+        file_name (str): the file name that the user wants to remove
+
+    Raises:
+        Exception: when file name is not a string
+        Exception: when connection to db failed
+
+    Returns:
+        str: "invoice deleted" on success
+    """
     if isinstance(file_name, str) == 0:
         raise Exception(description="Invalid file name: must be a string")
 
     try:
-        DATABASE_URL = "postgres://hugfbhqshfeuxo:bb21e74bd662eb54bbfb67841e33cb3994fee2526208ee3667c736777acd8658@ec2-44-195-191-252.compute-1.amazonaws.com:5432/drj7scqvv00fb"
-
         # Connect to DB
         conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
@@ -17,11 +27,10 @@ def removeInvoice(file_name: str):
         cur = conn.cursor()
 
         # Check the file exists
-        extractOutput = extract(file_name)
+        extract_output = extract(file_name)
 
-        if extractOutput is None:
+        if extract_output is None:
             raise Exception(description="File name does not exist")
-
 
         # Remove invoice via file_name
         sql = "DELETE FROM invoices WHERE file_name = %s"

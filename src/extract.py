@@ -1,12 +1,23 @@
 import psycopg2
+from src.config import DATABASE_URL
 
 
 def extract(file_name: str):
+    """given a file name, return the invoice associate with the file name
+
+    Args:
+        file_name (str): the file name that the user wants to extract
+
+    Returns:
+        tuple: consisting (file_name, invoice_file) on success
+
+    Exception:
+        when connect to db failed
+    """
     assert isinstance(file_name, str), 'Please provide the xml as a string'
 
     try:
         # Connect to DB
-        DATABASE_URL = "postgres://hugfbhqshfeuxo:bb21e74bd662eb54bbfb67841e33cb3994fee2526208ee3667c736777acd8658@ec2-44-195-191-252.compute-1.amazonaws.com:5432/drj7scqvv00fb"
         conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
         # Open a cursor for db operations
@@ -16,12 +27,12 @@ def extract(file_name: str):
         sql = "SELECT * FROM invoices WHERE file_name = %s"
         val = (file_name)
         cur.execute(sql, [val])
-        returnvalues = cur.fetchone()
+        return_val = cur.fetchone()
         # Close DB connection
         cur.close()
         conn.close()
 
-        return returnvalues
+        return return_val
 
     except Exception as e:
         print(e)

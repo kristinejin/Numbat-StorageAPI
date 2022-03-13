@@ -1,7 +1,7 @@
 import pytest
 import random
 import string
-from src.flaskServer import app
+from src.flask_server import app
 
 
 @pytest.fixture
@@ -10,7 +10,8 @@ def client():
 
 
 def test_extract_basic(client):
-    file_name = (''.join(random.choice(string.ascii_lowercase) for i in range(10)))
+    file_name = (''.join(random.choice(string.ascii_lowercase)
+                 for i in range(10)))
     # Store 'xml'
     resp = client.get("/store")
     assert resp.status_code == 200
@@ -26,7 +27,8 @@ def test_extract_basic(client):
 
 
 def test_extract_not_there(client):
-    file_name = (''.join(random.choice(string.ascii_lowercase) for i in range(10)))
+    file_name = (''.join(random.choice(string.ascii_lowercase)
+                 for i in range(10)))
     # Store 'xml'
     resp = client.get("/store")
     assert resp.status_code == 200
