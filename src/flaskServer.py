@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for
-from store import storeInvoice
-from extract import extract
-from remove import removeInvoice
+from src.store import storeInvoice
+from src.extract import extract
+from src.remove import removeInvoice
 
 
 app = Flask(__name__)
