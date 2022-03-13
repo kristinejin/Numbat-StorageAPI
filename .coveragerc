@@ -5,6 +5,7 @@ directory = coverage
 [run]
 omit = 
     src/echo.py
+    src/error.py
 
 
 [report]
