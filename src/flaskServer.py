@@ -1,7 +1,14 @@
 from flask import Flask, request, render_template, redirect, url_for
+<<<<<<< HEAD
 from src.store import storeInvoice
 from src.extract import extract
 from src.remove import removeInvoice
+=======
+from store import storeInvoice
+from extract import extract
+from remove import removeInvoice
+from search import search
+>>>>>>> main
 
 
 app = Flask(__name__)
@@ -16,6 +23,8 @@ def flask_home():
             return(redirect(url_for("flask_extract")))
         elif request.form["HomeButton"] == 'Delete Invoice':
             return(redirect(url_for("flask_remove")))
+        elif request.form["HomeButton"] == 'Search Invoice':
+            return(redirect(url_for("flask_search")))
     else:
         return render_template("Home.html")
 
@@ -69,6 +78,28 @@ def flask_extract():
 
     else:
         return render_template("extractMain.html")
+
+@app.route("/search", methods=["POST","GET"])
+def flask_search():
+    #Get User Input
+    sender_name = []
+    issue_date = []
+    if request.method == "POST":
+        sender_name.append(request.form["sfn"]) 
+        issue_date.append(request.form["ssd"])
+    #Check if store function stores it properly
+        try:
+            ret_l = search(issue_date,sender_name)
+            # print(ret_l)
+
+            return render_template("searchS.html", xmll = ret_l)
+        except Exception as e:
+            # print (e)
+            return render_template("extractF.html")
+            raise e
+
+    else:
+        return render_template("searchMain.html")
     
 if __name__ == '__main__':
     app.debug = True
