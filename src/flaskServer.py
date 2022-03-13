@@ -3,7 +3,7 @@ from src.store import storeInvoice
 from src.extract import extract
 from src.remove import removeInvoice
 from src.search import search
-from src.error import InputError, ConnectionError
+# from src.error import InputError, ConnectionError
 
 
 app = Flask(__name__)
