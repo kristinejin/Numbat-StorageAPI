@@ -20,7 +20,8 @@ def removeInvoice(file_name: str):
         extractOutput = extract(file_name)
 
         if extractOutput is None:
-            return "File name does not exist"
+            raise Exception(description="File name does not exist")
+
 
         # Remove invoice via file_name
         sql = "DELETE FROM invoices WHERE file_name = %s"

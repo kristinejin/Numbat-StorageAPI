@@ -2,3 +2,4 @@ flake8
 pytest
 coverage
 psycopg2
+flask

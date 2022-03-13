@@ -45,7 +45,7 @@ def test_remove_file_nonexistant():
     # the random file name generated is 4 characters
     fileName = 'abc'
     output = removeInvoice(fileName)
-    assert output == "File name does not exist"
+    assert output == None
 
 
 def test_remove_filename_not_string():
