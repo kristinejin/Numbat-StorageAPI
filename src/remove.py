@@ -1,5 +1,6 @@
 #import xml.etree.ElementTree as ET
 import psycopg2
+from src.extract import extract
 
 
 def removeInvoice(filename: str):
@@ -20,6 +21,12 @@ def removeInvoice(filename: str):
     # Open a cursor for db operations
       cur = conn.cursor()
     
+    # Check the file exists
+      extractOutput = extract(filename)
+
+      if extractOutput == None:
+        return "File name does not exist"
+
     # Remove invoice via filename
       sql = "DELETE FROM invoices WHERE filename = %s"
       val = filename
