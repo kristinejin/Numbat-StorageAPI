@@ -3,7 +3,10 @@ exclude =
     test_store.py
     echo_test.py
     xmlString.py
-    test_delete.py
+    test_remove.py
+    test_search.py
+    test_extract.py
+    
     .git
 
 ignore = 
