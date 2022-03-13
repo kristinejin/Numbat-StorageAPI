@@ -46,3 +46,16 @@ def test_file_nonexistant():
     fileName = 'abc'
     output = removeInvoice(fileName)
     assert output == "File name does not exist"
+
+def test_filename_not_string():
+    # store a file with filename as a string
+    fileName = '1234'
+    storeInvoice(xml_as_string,fileName)
+
+    # double check file has been stored
+    output = extract(fileName)
+    assert output[0] == fileName
+
+    # attempt to delete fileName as an int
+    with pytest.raises(Exception):
+        removeInvoice(1234)

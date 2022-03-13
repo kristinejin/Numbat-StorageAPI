@@ -5,8 +5,8 @@ from src.extract import extract
 
 def removeInvoice(filename: str):
 
-    assert isinstance(filename, str), 'Please provide the file name as a string'
-
+    if isinstance(filename, str) == 0:
+      raise Exception (description="Invalid file name: must be a string")
 # Convert string to XML
     # root = ET.fromstring(xml)
     # print(root)
