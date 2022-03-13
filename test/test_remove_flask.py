@@ -34,7 +34,7 @@ def test_remove_not_there(client):
     # Store 'xml'
     resp = client.get("/store")
     assert resp.status_code == 200
-    resp = client.post("/store", data={"fnm": "Test", "xmll": "Pls"})
+    resp = client.post("/store", data={"fnm": "SecondTest", "xmll": "Pls"})
     assert resp.status_code == 200
 
     # Delete non-existant xml
