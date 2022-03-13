@@ -9,19 +9,17 @@ Assumptions:
 import pytest
 import string
 import random
-import psycopg2
 from src.store import storeInvoice
 from src.remove import removeInvoice
 from src.extract import extract
 from test.xmlString import xml_as_string
-#import xml.etree.ElementTree as ET
 
-#DATABASE_URL = "postgres://hugfbhqshfeuxo:bb21e74bd662eb54bbfb67841e33cb3994fee2526208ee3667c736777acd8658@ec2-44-195-191-252.compute-1.amazonaws.com:5432/drj7scqvv00fb"
 
-def test_delete():
-    # store a file 
-    fileName = (''.join(random.choice(string.ascii_lowercase) for i in range(4)))
-    storeInvoice(xml_as_string,fileName)
+def test_remove_success():
+    # store a file
+    fileName = (''.join(random.choice(string.ascii_lowercase)
+                for i in range(4)))
+    storeInvoice(xml_as_string, fileName)
 
     # double check file has been stored
     output = extract(fileName)
@@ -32,10 +30,12 @@ def test_delete():
     output = extract(fileName)
     assert output == None
 
-def test_file_nonexistant():
+
+def test_remove_file_nonexistant():
     # store a file
-    fileName = (''.join(random.choice(string.ascii_lowercase) for i in range(4)))
-    storeInvoice(xml_as_string,fileName)
+    fileName = (''.join(random.choice(string.ascii_lowercase)
+                for i in range(4)))
+    storeInvoice(xml_as_string, fileName)
 
     # double check file has been stored
     output = extract(fileName)
@@ -47,15 +47,17 @@ def test_file_nonexistant():
     output = removeInvoice(fileName)
     assert output == "File name does not exist"
 
-def test_filename_not_string():
-    # store a file with filename as a string
-    fileName = '1234'
-    storeInvoice(xml_as_string,fileName)
+
+def test_remove_filename_not_string():
+    # store a file with file_name as a string
+    integer = random.randint(1000, 9999)
+    file_name = f'{integer}'
+    storeInvoice(xml_as_string, file_name)
 
     # double check file has been stored
-    output = extract(fileName)
-    assert output[0] == fileName
+    output = extract(file_name)
+    assert output[0] == file_name
 
-    # attempt to delete fileName as an int
+    # attempt to delete file_name as an int
     with pytest.raises(Exception):
-        removeInvoice(1234)
+        removeInvoice(integer)
