@@ -24,7 +24,7 @@ def removeInvoice(filename: str):
     # Check the file exists
       extractOutput = extract(filename)
 
-      if extractOutput == None:
+      if extractOutput is None:
         return "File name does not exist"
 
     # Remove invoice via filename
