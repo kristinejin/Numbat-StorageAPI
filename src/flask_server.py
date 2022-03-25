@@ -3,8 +3,8 @@ from src.store import store
 from src.extract import extract
 from src.remove import remove
 from src.search import search
-# from src.error import InputError, ConnectionError
-
+from src.error import InputError, ConnectionError
+from json import dumps
 
 app = Flask(__name__)
 
@@ -32,9 +32,9 @@ def flask_home():
 def flask_store():
     # Get User Input
     if request.method == "POST":
-        password = request.form["Password"]
-        fname = request.form["FileName"]
-        xmlfile = request.form["XML"]
+        password = request.get_json()["Password"]
+        fname = request.get_json()["FileName"]
+        xmlfile = request.get_json()["XML"]
     # Check if store function stores it properly
         try:
             store(xmlfile, fname, password)
@@ -66,14 +66,23 @@ def flask_remove():
 def flask_extract():
     # Get User Input
     if request.method == "POST":
-        password = request.form["Password"]
-        fname = request.form["FileName"]
+        password = request.get_json()["Password"]
+        fname = request.get_json()["FileName"]
     # Check if store function stores it properly
         try:
-            xmlf = extract(fname, password)
-            return xmlf
+            xml = extract(fname, password)
+            if xml == None:
+                raise InputError(description="file not found with given filename and password")
+            else:
+                return dumps({"XML": xml})
         except Exception as e:
             return e
+            
+        # try:
+        #     xmlf = extract(fname, password)
+        #     return xmlf
+        # except Exception as e:
+        #     return e
 
     else:
         return render_template("extractMain.html")
