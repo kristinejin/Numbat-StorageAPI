@@ -12,33 +12,38 @@ def client():
 def test_extract_basic(client):
     file_name = (''.join(random.choice(string.ascii_lowercase)
                  for i in range(10)))
+    password = (''.join(random.choice(string.ascii_lowercase)
+                 for i in range(10)))
     # Store 'xml'
-    resp = client.get("/store")
-    assert resp.status_code == 200
-    resp = client.post("/store", data={"fnm": file_name, "xmll": "Pls"})
+    # resp = client.get("/store")
+    # assert resp.status_code == 200
+    resp = client.post("/store", data={"FileName": file_name, "XML": "Pls", "Password": password})
     assert resp.status_code == 200
 
     # Extract stored 'xml'
-    resp = client.get("/extract")
-    print(resp.data)
+    # resp = client.get("/extract")
+    # print(resp.data)
     assert resp.status_code == 200
-    resp = client.post("/extract", data={"efn": file_name})
+    resp = client.post("/extract", data={"FileName": file_name, "Password": password})
     assert resp.status_code == 200
 
 
 def test_extract_not_there(client):
     file_name = (''.join(random.choice(string.ascii_lowercase)
                  for i in range(10)))
-    # Store 'xml'
-    resp = client.get("/store")
-    assert resp.status_code == 200
-    resp = client.post("/store", data={"fnm": file_name, "xmll": "Pls"})
+    password = (''.join(random.choice(string.ascii_lowercase)
+                 for i in range(10)))
+    
+    # resp = client.get("/store")
+    # assert resp.status_code == 200
+    resp = client.post("/store", data={"FileName": file_name, "XML": "Pls", "Password": password})
     assert resp.status_code == 200
 
     # Extract stored 'xml'
-    resp = client.get("/extract")
-    print(resp.data)
+    # resp = client.get("/extract")
+    # print(resp.data)
     assert resp.status_code == 200
-    resp = client.post("/extract", data={"efn": file_name + 'i'})
+    resp = client.post("/extract", data={"FileName": file_name + 'i', "Password": password + 'i'})
     assert resp.status_code == 200
-    # assert resp.status_code == 400
+
+
