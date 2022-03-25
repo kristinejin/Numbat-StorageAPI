@@ -1,6 +1,5 @@
 import xml.etree.ElementTree as ET
 import psycopg2
-from src.extract import extract
 from src.config import DATABASE_URL
 
 
@@ -46,7 +45,7 @@ def store(xml: str, file_name: str, password: str):
         # Close DB connection
         cur.close()
         conn.close()
-    except SyntaxError as e:
+    except SyntaxError:
         # TODO: still stores?
         raise Exception(
             description="Incorrect input format, please input invoice in the standardised format")

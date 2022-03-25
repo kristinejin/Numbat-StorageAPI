@@ -53,8 +53,6 @@ def test_store_duplicated_fname_and_password(client):
 
 
 def test_store_invalid_xml(client):
-    date = generate_random_date()
-    sender_name = generate_random_name(20)
     xml = 'invalid xml'
     file_name = generate_random_name(5)
     # stores the invoice

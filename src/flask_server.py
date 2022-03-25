@@ -3,7 +3,7 @@ from src.store import store
 from src.extract import extract
 from src.remove import remove
 from src.search import search
-from src.error import InputError, ConnectionError
+from src.error import InputError
 from json import dumps
 
 app = Flask(__name__)
@@ -39,7 +39,7 @@ def flask_store():
         try:
             store(xmlfile, fname, password)
             return 'success'
-        except Exception as e:
+        except Exception:
             raise InputError(description="Wrong xml input type or Password")
     else:
         return render_template("storeMain.html")
@@ -108,7 +108,7 @@ def flask_search():
         try:
             ret_l = search(issue_date, sender_name, password)
             return dumps({"file_names": ret_l})
-        except Exception as e:
+        except Exception:
             raise InputError(description="Incorrect search key(s) or Password")
     else:
         return render_template("searchMain.html")
