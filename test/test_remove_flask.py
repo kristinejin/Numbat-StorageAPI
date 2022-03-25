@@ -18,7 +18,7 @@ def test_remove_basic(client):
     resp = client.get("/remove")
     print(resp.data)
     assert resp.status_code == 200
-    resp = client.post("remove", data={"FileName": "TestRemove", "Password": "test"})
+    resp = client.post("/remove", data={"FileName": "TestRemove", "Password": "test"})
     assert resp.status_code == 200
 
     # Ensure removed correctly
@@ -26,8 +26,7 @@ def test_remove_basic(client):
     print(resp.data)
     assert resp.status_code == 200
     resp = client.post("/extract", data={"FileName": "TestRemove", "Password": "test"})
-    assert resp.status_code == 200
-    # assert resp.status_code == 400
+    assert resp.status_code == 400
 
 
 def test_remove_not_there(client):
@@ -58,6 +57,20 @@ def test_remove_same_filename_different_password(client):
     resp = client.post("/remove", data={"FileName": "SecondTest", "Password": "test2"})
     assert resp.status_code == 400
 
+    # Check SecondTest with password test2 is gone
+    resp = client.get("/extract")
+    print(resp.data)
+    assert resp.status_code == 200
+    resp = client.post("/extract", data={"FileName": "SecondTest", "Password": "test2"})
+    assert resp.status_code == 400
+
+    # Check SecondTest with passwrod test is still in db
+    resp = client.get("/extract")
+    print(resp.data)
+    assert resp.status_code == 200
+    resp = client.post("/extract", data={"FileName": "SecondTest", "Password": "test2"})
+    assert resp.status_code == 200
+
 def test_remove_matching_filename(client):
     # Store 'xml' with password 'test'
     resp = client.get("/store")
@@ -84,4 +97,4 @@ def test_remove_matching_filename(client):
     assert resp.status_code == 200
     resp = client.post("/extract", data={"FileName": "TestRemove", "Password": "test"})
     assert resp.status_code == 200
-    # assert resp.status_code == 400
+    
