@@ -37,7 +37,7 @@ def flask_store():
         xmlfile = request.form["XML"]
     # Check if store function stores it properly
         try:
-            store(xmlfile, fname)
+            store(xmlfile, fname, password)
             return 'success'
         except Exception as e:
             return 'failure'     
