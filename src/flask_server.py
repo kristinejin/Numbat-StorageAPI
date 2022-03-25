@@ -66,11 +66,12 @@ def flask_remove():
 def flask_extract():
     # Get User Input
     if request.method == "POST":
+        password = request.form["Password"]
         fname = request.form["FileName"]
     # Check if store function stores it properly
         try:
-            xmlf = extract(fname)
-            return xmlf[1]
+            xmlf = extract(fname, password)
+            return xmlf
         except Exception as e:
             return e
 

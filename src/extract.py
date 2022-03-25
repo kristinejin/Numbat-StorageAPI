@@ -2,7 +2,7 @@ import psycopg2
 from src.config import DATABASE_URL
 
 
-def extract(file_name: str):
+def extract(file_name: str, password: str):
     """given a file name, return the invoice associate with the file name
 
     Args:
@@ -14,7 +14,7 @@ def extract(file_name: str):
     Exception:
         when connect to db failed
     """
-    assert isinstance(file_name, str), 'Please provide the xml as a string'
+    assert isinstance(file_name, str), 'Please provide the filename as a string'
 
     try:
         # Connect to DB
@@ -24,9 +24,9 @@ def extract(file_name: str):
         cur = conn.cursor()
 
         # Extract File Name and XML
-        sql = "SELECT * FROM invoices WHERE file_name = %s"
-        val = (file_name)
-        cur.execute(sql, [val])
+        sql = "SELECT XML FROM invoices WHERE File_name = %s AND password = %s"
+        val = (file_name, password)
+        cur.execute(sql, list(val))
         return_val = cur.fetchone()
         # Close DB connection
         cur.close()
