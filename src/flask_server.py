@@ -32,6 +32,7 @@ def flask_home():
 def flask_store():
     # Get User Input
     if request.method == "POST":
+        password = request.form["Password"]
         fname = request.form["FileName"]
         xmlfile = request.form["XML"]
     # Check if store function stores it properly
@@ -69,8 +70,6 @@ def flask_extract():
     # Check if store function stores it properly
         try:
             xmlf = extract(fname)
-            print(type(xmlf[1]))
-
             return xmlf[1]
         except Exception as e:
             return e
