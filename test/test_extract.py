@@ -4,6 +4,7 @@ from src.store import store
 from src.extract import extract
 from test.xml_str import xml_as_string
 
+
 def test_store_and_extract():
     # test simple extraction
     fileName = (''.join(random.choice(string.ascii_lowercase)

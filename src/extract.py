@@ -14,7 +14,8 @@ def extract(file_name: str, password: str):
     Exception:
         when connect to db failed
     """
-    assert isinstance(file_name, str), 'Please provide the filename as a string'
+    assert isinstance(
+        file_name, str), 'Please provide the filename as a string'
 
     try:
         # Connect to DB

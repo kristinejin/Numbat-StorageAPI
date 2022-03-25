@@ -40,11 +40,13 @@ def flask_store():
             store(xmlfile, fname, password)
             return 'success'
         except Exception as e:
-            return 'failure'     
+            raise InputError(description="Wrong xml input type or Password")
     else:
         return render_template("storeMain.html")
 
 # remove route
+
+
 @app.route("/remove", methods=["POST", "GET"])
 def flask_remove():
     # Get User Input
@@ -65,6 +67,8 @@ def flask_remove():
         return render_template("deleteMain.html")
 
 # extract route
+
+
 @app.route("/extract", methods=["POST", "GET"])
 def flask_extract():
     # Get User Input
@@ -75,12 +79,13 @@ def flask_extract():
         try:
             xml = extract(fname, password)
             if xml == None:
-                raise InputError(description="file not found with given filename and password")
+                raise InputError(
+                    description="file not found with given filename and password")
             else:
                 return xml[0]
         except Exception as e:
             return e
-            
+
         # try:
         #     xmlf = extract(fname, password)
         #     return xmlf

@@ -4,7 +4,7 @@ from src.extract import extract
 from src.config import DATABASE_URL
 
 
-def store(xml: str, file_name: str, password :str):
+def store(xml: str, file_name: str, password: str):
     """given a standardised e-invoice xml in a string and a file name, save this e-invoice to database with the file name.
 
     Args:
@@ -19,23 +19,16 @@ def store(xml: str, file_name: str, password :str):
     if not isinstance(xml, str):
         raise Exception("Please provide the invoice xml in a string")
 
-    # raise an error if there's a file in the database associate with the given file name
-    # if extract(file_name):
-    #     raise Exception("This file name is taken! Please try another one.")
-
-    # Convert string to XML
-    root = ET.fromstring(xml)
-
-    # Extract key from XML
-    key_list = []
-    ##!! do TRY except error
-    for child in root.iter():
-        if child.text.strip():
-            key_list.append(child.text)
-    issue_date = key_list[4]
-    sender_name = key_list[10]
-
     try:
+        # Convert string to XML
+        root = ET.fromstring(xml)
+        key_list = []
+        # Extract key from XML
+        for child in root.iter():
+            if child.text.strip():
+                key_list.append(child.text)
+        issue_date = key_list[4]
+        sender_name = key_list[10]
         # Connect to DB
         conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
@@ -53,8 +46,14 @@ def store(xml: str, file_name: str, password :str):
         # Close DB connection
         cur.close()
         conn.close()
+    except SyntaxError as e:
+        # TODO: still stores?
+        raise Exception(
+            description="Incorrect input format, please input invoice in the standardised format")
+
     except Exception as e:
-        print(f"Cannot connect to the database, {e}")
+        raise Exception(description=f"Cannot connect to the database, {e}")
+
 
 if __name__ == '__main__':
     store("""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -159,6 +158,3 @@ if __name__ == '__main__':
       </cac:Price>
    </cac:InvoiceLine>
 </Invoice>""", "whatsupp", "kristine")
-
-
-
