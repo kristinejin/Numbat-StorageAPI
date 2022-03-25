@@ -54,15 +54,11 @@ def flask_remove():
     # Check if store function stores it properly
         try:
             response = remove(fname, password)
-            print('First')
             if response == 200:
-                print('Second')
                 return '200'
             else:
-                print('Third')
                 return InputError(description="failed to remove file: incorrect file name or password")
         except Exception as e:
-            print('Fourth')
             return e
             # raise e
     else:

@@ -26,7 +26,6 @@ def test_remove_basic(client):
     resp = client.get("/remove")
     assert resp.status_code == 200
     resp = client.post("/remove", data={"FileName": file_name, "Password": password})
-    print(resp.data)
     assert resp.status_code == 200
 
     # Ensure removed correctly
