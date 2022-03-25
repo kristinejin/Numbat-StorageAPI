@@ -32,9 +32,9 @@ def flask_home():
 def flask_store():
     # Get User Input
     if request.method == "POST":
-        password = request.get_json()["Password"]
-        fname = request.get_json()["FileName"]
-        xmlfile = request.get_json()["XML"]
+        password = request.form["Password"]
+        fname = request.form["FileName"]
+        xmlfile = request.form["XML"]
     # Check if store function stores it properly
         try:
             store(xmlfile, fname, password)
@@ -50,13 +50,20 @@ def flask_remove():
     # Get User Input
     if request.method == "POST":
         fname = request.form["FileName"]
-        print(fname)
+        password = request.form["Password"]
     # Check if store function stores it properly
         try:
-            remove(fname)
-            return 'success'
+            response = remove(fname, password)
+            print('First')
+            if response == 200:
+                print('Second')
+                return '200'
+            else:
+                print('Third')
+                return InputError(description="failed to remove file: incorrect file name or password")
         except Exception as e:
-            return 'failure'
+            print('Fourth')
+            return e
             # raise e
     else:
         return render_template("deleteMain.html")
@@ -66,15 +73,15 @@ def flask_remove():
 def flask_extract():
     # Get User Input
     if request.method == "POST":
-        password = request.get_json()["Password"]
-        fname = request.get_json()["FileName"]
+        password = request.form["Password"]
+        fname = request.form["FileName"]
     # Check if store function stores it properly
         try:
             xml = extract(fname, password)
             if xml == None:
                 raise InputError(description="file not found with given filename and password")
             else:
-                return dumps({"XML": xml})
+                return xml[0]
         except Exception as e:
             return e
             

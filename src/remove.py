@@ -33,9 +33,9 @@ def remove(file_name: str, password: str):
             raise Exception(description="File name does not exist or incorrect password")
 
         # Remove invoice via file_name
-        sql = "DELETE FROM invoices WHERE (FileName = %s AND Password = %s)"
-        val = file_name, password
-        cur.execute(sql, [val])
+        sql = "DELETE FROM invoices WHERE (File_Name = %s AND Password = %s)"
+        val = (file_name, password)
+        cur.execute(sql, list(val))
 
         # Save changes
         conn.commit()
@@ -44,6 +44,6 @@ def remove(file_name: str, password: str):
         cur.close()
         conn.close()
 
-        return "Invoice deleted"
+        return 200
     except Exception as e:
         print(e)
