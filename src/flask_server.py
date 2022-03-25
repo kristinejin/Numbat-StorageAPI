@@ -32,55 +32,48 @@ def flask_home():
 def flask_store():
     # Get User Input
     if request.method == "POST":
-        fname = request.form["fnm"]
-        xmlfile = request.form["xmll"]
+        fname = request.form["FileName"]
+        xmlfile = request.form["XML"]
     # Check if store function stores it properly
         try:
             store(xmlfile, fname)
-            return render_template("savedS.html")
+            return 'success'
         except Exception as e:
-            return render_template("savedF.html")
-            raise e
-
+            return 'failure'     
     else:
         return render_template("storeMain.html")
 
 # remove route
-
-
 @app.route("/remove", methods=["POST", "GET"])
 def flask_remove():
     # Get User Input
     if request.method == "POST":
-        fname = request.form["dfm"]
+        fname = request.form["FileName"]
         print(fname)
     # Check if store function stores it properly
         try:
             remove(fname)
-            return render_template("DeleteS.html")
+            return 'success'
         except Exception as e:
-            print(e)
-            return render_template("DeleteF.html")
+            return 'failure'
             # raise e
-
     else:
         return render_template("deleteMain.html")
 
 # extract route
-
-
 @app.route("/extract", methods=["POST", "GET"])
 def flask_extract():
     # Get User Input
     if request.method == "POST":
-        fname = request.form["efn"]
+        fname = request.form["FileName"]
     # Check if store function stores it properly
         try:
-            fname, xmlf = extract(fname)
-            return render_template("extractS.html", xmll=xmlf)
+            xmlf = extract(fname)
+            print(type(xmlf[1]))
+
+            return xmlf[1]
         except Exception as e:
-            return render_template("extractF.html")
-            raise e
+            return e
 
     else:
         return render_template("extractMain.html")
@@ -92,19 +85,17 @@ def flask_search():
     sender_name = []
     issue_date = []
     if request.method == "POST":
-        sender_name.append(request.form["sfn"])
-        issue_date.append(request.form["ssd"])
+        sender_name.append(request.form["senderName"])
+        issue_date.append(request.form["senderDate"])
     # Check if store function stores it properly
         try:
             ret_l = search(issue_date, sender_name)
             # print(ret_l)
+            return ret_l
 
-            return render_template("searchS.html", xmll=ret_l)
         except Exception as e:
             # print (e)
-            return render_template("extractF.html")
-            raise e
-
+            return "failure"
     else:
         return render_template("searchMain.html")
 

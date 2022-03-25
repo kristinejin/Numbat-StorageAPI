@@ -31,7 +31,6 @@ def extract(file_name: str):
         # Close DB connection
         cur.close()
         conn.close()
-
         return return_val
 
     except Exception as e:
