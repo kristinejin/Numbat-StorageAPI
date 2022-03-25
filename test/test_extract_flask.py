@@ -5,9 +5,11 @@ from src.flask_server import app
 import requests
 from test.xml_str import xml_as_string
 
-URL = "http://127.0.0.1:5000"
+@pytest.fixture
+def client():
+    return app.test_client()
 
-def test_extract_basic():
+def test_extract_basic(client):
     file_name = (''.join(random.choice(string.ascii_lowercase)
                  for i in range(10)))
     password = (''.join(random.choice(string.ascii_lowercase)
@@ -15,20 +17,17 @@ def test_extract_basic():
     # Store 'xml'
     # resp = client.get("/store")
     # assert resp.status_code == 200
-    resp = requests.post(URL + "/store", json={"FileName": file_name, "XML": xml_as_string, "Password": password})
+    resp = client.post("/store", data={"FileName": file_name, "XML": xml_as_string, "Password": password})
     assert resp.status_code == 200
 
     # Extract stored 'xml'
     # resp = client.get("/extract")
-    # print(resp.data)
-    # assert resp.status_code == 200
-    resp = requests.post(URL + "/extract", json={"FileName": file_name, "Password": password})
-    assert resp.json()["XML"][0] == xml_as_string
-    # assert resp.content() == "pls"
+    resp = client.post("/extract", data={"FileName": file_name, "Password": password})
+    assert xml_as_string == resp.get_data(as_text=True)
     assert resp.status_code == 200
 
 
-def test_extract_not_there():
+def test_extract_not_there(client):
     file_name = (''.join(random.choice(string.ascii_lowercase)
                  for i in range(10)))
     password = (''.join(random.choice(string.ascii_lowercase)
@@ -36,14 +35,14 @@ def test_extract_not_there():
     
     # resp = client.get("/store")
     # assert resp.status_code == 200
-    resp = requests.post(URL + "/store", json={"FileName": file_name, "XML": xml_as_string, "Password": password})
+    resp = client.post("/store", data={"FileName": file_name, "XML": xml_as_string, "Password": password})
     assert resp.status_code == 200
 
     # Extract stored 'xml'
     # resp = client.get("/extract")
     # print(resp.data)
     # assert resp.status_code == 200
-    resp = requests.post(URL + "/extract", json={"FileName": file_name + 'i', "Password": password + 'i'})
+    resp = client.post("/extract", data={"FileName": file_name + 'i', "Password": password + 'i'})
     assert resp.status_code == 400
 
 
