@@ -102,17 +102,14 @@ def flask_search():
     sender_name = []
     issue_date = []
     if request.method == "POST":
-        sender_name.append(request.form["senderName"])
-        issue_date.append(request.form["senderDate"])
-    # Check if store function stores it properly
+        password = request.form.get("Password")
+        sender_name.append(request.form.get("sender_name"))
+        issue_date.append(request.form.get("issue_date"))
         try:
-            ret_l = search(issue_date, sender_name)
-            # print(ret_l)
-            return ret_l
-
+            ret_l = search(issue_date, sender_name, password)
+            return dumps({"file_names": ret_l})
         except Exception as e:
-            # print (e)
-            return "failure"
+            raise InputError(description="Incorrect search key(s) or Password")
     else:
         return render_template("searchMain.html")
 
