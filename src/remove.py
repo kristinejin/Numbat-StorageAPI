@@ -3,8 +3,8 @@ from src.extract import extract
 from src.config import DATABASE_URL
 
 
-def remove(file_name: str):
-    """given a file name of an invoice, remove the invoice associate with the file name
+def remove(file_name: str, password: str):
+    """given a file name of an invoice and a password, remove the invoice associate with the file name and password
 
     Args:
         file_name (str): the file name that the user wants to remove
@@ -27,15 +27,15 @@ def remove(file_name: str):
         cur = conn.cursor()
 
         # Check the file exists
-        extract_output = extract(file_name)
+        extract_output = extract(file_name, password)
 
         if extract_output is None:
-            raise Exception(description="File name does not exist")
+            raise Exception(description="File name does not exist or incorrect password")
 
         # Remove invoice via file_name
-        sql = "DELETE FROM invoices WHERE file_name = %s"
-        val = file_name
-        cur.execute(sql, [val])
+        sql = "DELETE FROM invoices WHERE (File_Name = %s AND Password = %s)"
+        val = (file_name, password)
+        cur.execute(sql, list(val))
 
         # Save changes
         conn.commit()
@@ -44,6 +44,6 @@ def remove(file_name: str):
         cur.close()
         conn.close()
 
-        return "Invoice deleted"
+        return 200
     except Exception as e:
         print(e)

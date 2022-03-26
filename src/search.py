@@ -2,7 +2,7 @@ import psycopg2
 from src.config import DATABASE_URL
 
 
-def search(issue_date: list, sender_name: list):
+def search(issue_date: list, sender_name: list, password: str):
     """_summary_
     Args:
        - issue_date (list): a list of a single issue date as a string, can be empty if sender name is not empty
@@ -24,10 +24,10 @@ def search(issue_date: list, sender_name: list):
     if issue_date == empty_input and sender_name == empty_input:
         raise Exception("Please input at least one key")
 
-    if issue_date != empty_input:
+    if issue_date != empty_input and issue_date[0] != None:
         request_list.append(f"issue_date = '{issue_date[0]}'")
 
-    if sender_name != empty_input:
+    if sender_name != empty_input and sender_name[0] != None:
         request_list.append(f"sender_name = '{sender_name[0]}'")
 
     # generating querying command
@@ -41,9 +41,10 @@ def search(issue_date: list, sender_name: list):
         # connect to db
         conn = psycopg2.connect(DATABASE_URL, sslmode='require')
         cur = conn.cursor()
+
         # extracting desired invoice names
         cur.execute(
-            f"SELECT file_name FROM invoices WHERE {request_list}"
+            f"SELECT file_name FROM invoices WHERE {request_list} AND password = '{password}'"
         )
         rows = cur.fetchall()
         # close db connection

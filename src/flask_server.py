@@ -3,8 +3,8 @@ from src.store import store
 from src.extract import extract
 from src.remove import remove
 from src.search import search
-# from src.error import InputError, ConnectionError
-
+from src.error import InputError
+from json import dumps
 
 app = Flask(__name__)
 
@@ -32,16 +32,15 @@ def flask_home():
 def flask_store():
     # Get User Input
     if request.method == "POST":
-        fname = request.form["fnm"]
-        xmlfile = request.form["xmll"]
+        password = request.form["Password"]
+        fname = request.form["FileName"]
+        xmlfile = request.form["XML"]
     # Check if store function stores it properly
         try:
-            store(xmlfile, fname)
-            return render_template("savedS.html")
-        except Exception as e:
-            return render_template("savedF.html")
-            raise e
-
+            store(xmlfile, fname, password)
+            return 'success'
+        except Exception:
+            raise InputError(description="Wrong xml input type or Password")
     else:
         return render_template("storeMain.html")
 
@@ -52,17 +51,18 @@ def flask_store():
 def flask_remove():
     # Get User Input
     if request.method == "POST":
-        fname = request.form["dfm"]
-        print(fname)
+        fname = request.form["FileName"]
+        password = request.form["Password"]
     # Check if store function stores it properly
         try:
-            remove(fname)
-            return render_template("DeleteS.html")
+            response = remove(fname, password)
+            if response == 200:
+                return '200'
+            else:
+                return InputError(description="failed to remove file: incorrect file name or password")
         except Exception as e:
-            print(e)
-            return render_template("DeleteF.html")
+            return e
             # raise e
-
     else:
         return render_template("deleteMain.html")
 
@@ -73,14 +73,24 @@ def flask_remove():
 def flask_extract():
     # Get User Input
     if request.method == "POST":
-        fname = request.form["efn"]
+        password = request.form["Password"]
+        fname = request.form["FileName"]
     # Check if store function stores it properly
         try:
-            fname, xmlf = extract(fname)
-            return render_template("extractS.html", xmll=xmlf)
+            xml = extract(fname, password)
+            if xml == None:
+                raise InputError(
+                    description="file not found with given filename and password")
+            else:
+                return xml[0]
         except Exception as e:
-            return render_template("extractF.html")
-            raise e
+            return e
+
+        # try:
+        #     xmlf = extract(fname, password)
+        #     return xmlf
+        # except Exception as e:
+        #     return e
 
     else:
         return render_template("extractMain.html")
@@ -92,19 +102,14 @@ def flask_search():
     sender_name = []
     issue_date = []
     if request.method == "POST":
-        sender_name.append(request.form["sfn"])
-        issue_date.append(request.form["ssd"])
-    # Check if store function stores it properly
+        password = request.form.get("Password")
+        sender_name.append(request.form.get("sender_name"))
+        issue_date.append(request.form.get("issue_date"))
         try:
-            ret_l = search(issue_date, sender_name)
-            # print(ret_l)
-
-            return render_template("searchS.html", xmll=ret_l)
-        except Exception as e:
-            # print (e)
-            return render_template("extractF.html")
-            raise e
-
+            ret_l = search(issue_date, sender_name, password)
+            return dumps({"file_names": ret_l})
+        except Exception:
+            raise InputError(description="Incorrect search key(s) or Password")
     else:
         return render_template("searchMain.html")
 
