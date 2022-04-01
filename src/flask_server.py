@@ -3,10 +3,14 @@ from src.store import store
 from src.extract import extract
 from src.remove import remove
 from src.search import search
+from flask_cors import CORS
+# from src.error import InputError, ConnectionError
+
 from src.error import InputError
 from json import dumps
 
 app = Flask(__name__)
+CORS(app)
 
 # home route
 
