@@ -2,7 +2,7 @@ import pytest
 from src.flask_server import app
 from test.xml_str_for_search import generate_random_date, generate_random_name, generate_unique_xml
 import json
-PASSWORD = 'searchtest'
+PASSWORD = 'stest'
 
 
 @pytest.fixture
@@ -12,7 +12,7 @@ def client():
 
 def test_search_success_both_keys(client):
     date = generate_random_date()
-    sender_name = generate_random_name(20)
+    sender_name = generate_random_name(10)
     xml = generate_unique_xml(date, sender_name)
     file_name = generate_random_name(5)
     # stores the invoice

@@ -48,7 +48,7 @@ def generate_unique_xml(issue_date, sender_name):
                 </cac:Country>
             </cac:PostalAddress>
             <cac:PartyLegalEntity>
-                <cbc:RegistrationName>Ebusiness Software Services Pty Ltd</cbc:RegistrationName>
+                <cbc:RegistrationName>{sender_name}</cbc:RegistrationName>
                 <cbc:CompanyID schemeAgencyID="ZZZ" schemeID="0151">80647710156</cbc:CompanyID>
             </cac:PartyLegalEntity>
         </cac:Party>
