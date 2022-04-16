@@ -44,7 +44,8 @@ def flask_store():
             store(xmlfile, fname, password)
             return 'success'
         except Exception:
-            raise InputError(description="Wrong xml input type or Password")
+            raise InputError(
+                description="Wrong xml input type or Password")
     else:
         return render_template("storeMain.html")
 

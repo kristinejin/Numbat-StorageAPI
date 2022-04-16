@@ -2,6 +2,10 @@ import xml.etree.ElementTree as ET
 import psycopg2
 from src.config import DATABASE_URL
 
+cac = "{urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2}"
+cbc = "{urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2}"
+# cec = "{urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2}"
+
 
 def store(xml: str, file_name: str, password: str):
     """given a standardised e-invoice xml in a string and a file name, save this e-invoice to database with the file name.
@@ -19,15 +23,11 @@ def store(xml: str, file_name: str, password: str):
         raise Exception("Please provide the invoice xml in a string")
 
     try:
-        # Convert string to XML
+        # Parse xml to get keys
         root = ET.fromstring(xml)
-        key_list = []
-        # Extract key from XML
-        for child in root.iter():
-            if child.text.strip():
-                key_list.append(child.text)
-        issue_date = key_list[4]
-        sender_name = key_list[10]
+        issue_date = root.find(cbc + 'IssueDate').text
+        sender_name = root.find(cac + 'AccountingSupplierParty/' + cac + 'Party/' +
+                                cac + 'PartyLegalEntity/' + cbc + 'RegistrationName').text
         # Connect to DB
         conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
@@ -56,7 +56,7 @@ def store(xml: str, file_name: str, password: str):
 
 if __name__ == '__main__':
     store("""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Invoice xmlns=" a " xmlns:cac=" b " xmlns:cbc=" c " xmlns:cec=" d ">
+<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cec="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2">
    <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
    <cbc:CustomizationID>urn:cen.eu:en16931:2017#conformant#urn:fdc:peppol.eu:2017:poacc:billing:international:aunz:3.0</cbc:CustomizationID>
    <cbc:ProfileID>urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</cbc:ProfileID>
