@@ -11,47 +11,53 @@ def store(xml: str, file_name: str, password: str):
     """given a standardised e-invoice xml in a string and a file name, save this e-invoice to database with the file name.
 
     Args:
-        xml (str): the e-invoice that the user wants to be saved
-        file_name (str): the file name that the user wants the e-invoice to be saved with
+         xml (str): the e-invoice that the user wants to be saved
+         file_name (str): the file name that the user wants the e-invoice to be saved with
 
     Raises:
-        Exception: when the invoice xml is not a string
-        Exception: when file name already exists in the db
-        Exception: when connection to db failed
+         Exception: when the invoice xml is not a string
+         Exception: when file name already exists in the db
+         Exception: when connection to db failed
     """
     if not isinstance(xml, str):
-        raise Exception("Please provide the invoice xml in a string")
+         raise Exception("Please provide the invoice xml in a string")
 
     try:
-        # Parse xml to get keys
-        root = ET.fromstring(xml)
-        issue_date = root.find(cbc + 'IssueDate').text
-        sender_name = root.find(cac + 'AccountingSupplierParty/' + cac + 'Party/' +
-                                cac + 'PartyLegalEntity/' + cbc + 'RegistrationName').text
-        # Connect to DB
-        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+         # Parse xml to get keys
+         root = ET.fromstring(xml)
+         issue_date = root.find(cbc + 'IssueDate').text
+         sender_name = root.find(cac + 'AccountingSupplierParty/' + cac + 'Party/' +
+                                 cac + 'PartyLegalEntity/' + cbc + 'RegistrationName').text
+         buyer_name = root.find(cac + 'AccountingCustomerParty/' + cac + 'Party/' +
+                                 cac + 'PartyLegalEntity/' + cbc + 'RegistrationName').text
+         amount_payable = root.find(cac + 'LegalMonetaryTotal/' + cbc + 'PayableAmount').text
+         tax_payable = root.find(cac + 'TaxTotal/' + cbc + 'TaxAmount').text
+         goods_payable = root.find(cac + 'LegalMonetaryTotal/' + cbc + 'LineExtensionAmount').text
 
-        # Open a cursor for db operations
-        cur = conn.cursor()
+         # Connect to DB
+         conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
-        # Insert data into db
-        sql = "INSERT INTO invoices VALUES (DEFAULT,%s, %s, %s, %s,%s)"
-        val = (file_name, xml, issue_date, sender_name, password)
-        cur.execute(sql, val)
+         # Open a cursor for db operations
+         cur = conn.cursor()
 
-        # Save changes
-        conn.commit()
+         # Insert data into db
+         sql = "INSERT INTO invoices VALUES (DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+         val = (file_name, xml, issue_date, sender_name, password, buyer_name, amount_payable, tax_payable, goods_payable)
+         cur.execute(sql, val)
 
-        # Close DB connection
-        cur.close()
-        conn.close()
+         # Save changes
+         conn.commit()
+
+         # Close DB connection
+         cur.close()
+         conn.close()
     except SyntaxError:
-        # TODO: still stores?
-        raise Exception(
+         # TODO: still stores?
+         raise Exception(
             description="Incorrect input format, please input invoice in the standardised format")
 
     except Exception as e:
-        raise Exception(description=f"Cannot connect to the database, {e}")
+         raise Exception(description=f"Cannot connect to the database, {e}")
 
 
 if __name__ == '__main__':
